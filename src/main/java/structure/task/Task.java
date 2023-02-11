@@ -1,7 +1,7 @@
 package structure.task;
 
+import net.mamoe.mirai.Bot;
 import org.jetbrains.annotations.NotNull;
-import java.util.Date;
 
 /**
  * Basic class for a test that contains a series of actions to be executed
@@ -13,16 +13,23 @@ public class Task implements Comparable<Task> {
 
     /**
      * Create a task.
+     */
+    public Task(){this.taskName = "未命名任务"; this.priority = 5;}
+
+    /**
+     * Create a task.
      * @param taskName the name of the task
      */
     public Task(String taskName){
         this.taskName = taskName;
+        this.priority = 5;
     }
 
     /**
      * Create a task.
      * @param taskName the name of the task
-     * @param priority the priority of the task. 1 for the least urgent and 9 for the most urgent.
+     * @param priority the priority of the task.
+     *                 Smaller priority indicates more urgent tasks. Default is 5.
      */
     public Task(String taskName, int priority){
         this(taskName);
@@ -32,8 +39,8 @@ public class Task implements Comparable<Task> {
 
     /**
      * get the priority of the task.
-     * @return an integer represents the priority of the task. 1 is for the least urgent and 9 is for
-     *         the most urgent.
+     * @return an integer represents the priority of the task.
+     *         Smaller priority indicates more urgent tasks. Default is 5.
      */
     public int getPriority() { return priority; }
 
@@ -48,9 +55,7 @@ public class Task implements Comparable<Task> {
      */
     @Override
     public int compareTo(@NotNull Task anotherTask){
-        if(priority > anotherTask.priority) return 1;
-        if(priority == anotherTask.priority) return 0;
-        return -1;
+        return Integer.compare(priority, anotherTask.priority);
     }
 
     @Override
@@ -61,10 +66,13 @@ public class Task implements Comparable<Task> {
 
 
     /**
-     * Something the task can execute by itself. Do nothing by default.
+     * Execute the task, then return a series of tasks to add into the task queue.
+     * @return an array of extra tasks that should be appended into the task queue.
      */
-    public void execute(){
-
+    public Task[] execute(){
+        // TODO: add logging
+        System.out.println("Wrong method was called! You need to override execute().");
+        return new Task[0];
     }
 
 }

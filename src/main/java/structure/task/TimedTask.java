@@ -1,5 +1,6 @@
 package structure.task;
 
+import org.jetbrains.annotations.NotNull;
 import java.util.Date;
 
 /**
@@ -42,8 +43,7 @@ public class TimedTask extends Task {
      */
     public boolean timeToExecute() {
         long currentTime = new Date().getTime();
-        if(currentTime > executeTime) return true;
-        return false;
+        return currentTime > executeTime;
     }
 
     /**
@@ -53,5 +53,13 @@ public class TimedTask extends Task {
     @Override
     public String toString(){
         return super.toString() + "(" + getExecuteTimeString() + ")";
+    }
+
+    @Override
+    public int compareTo(@NotNull Task anotherTask) {
+        if(anotherTask instanceof TimedTask){
+            return Long.compare(((TimedTask) anotherTask).executeTime, this.executeTime);
+        }
+        throw new ClassCastException();
     }
 }
