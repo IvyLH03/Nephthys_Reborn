@@ -6,27 +6,26 @@ import java.util.Date;
 /**
  * A kind of task that will be executed only after passing a certain time.
  */
-public class TimedTask extends Task {
+public class TimedTask extends Task{
     private long executeTime; // the time set for the task to be executed. A task will not be executed if
                               // local time < time.
+    private Task task; // the task to execute after the execution time
 
     /**
      * Constructor
-     * @param taskName the name of the task
+     * @param task the task to execute after the execution time
      * @param executeTime the timestamp set for the task to be executed after
      */
-    public TimedTask(String taskName, long executeTime) {
-        super(taskName);
+    public TimedTask(Task task, long executeTime) {
+        this.task = task;
         this.executeTime = executeTime;
     }
-
 
     /**
      * get the time set to execute the task.
      * @return a timestamp represent the time to execute the task.
      */
     public long getExecuteTimeLong() { return executeTime; }
-
 
     /**
      * get a formatted string represent the time to execute.
@@ -52,14 +51,23 @@ public class TimedTask extends Task {
      */
     @Override
     public String toString(){
-        return super.toString() + "(" + getExecuteTimeString() + ")";
+        return "(" + getExecuteTimeString() + ")" + task.toString();
     }
 
     @Override
     public int compareTo(@NotNull Task anotherTask) {
         if(anotherTask instanceof TimedTask){
-            return Long.compare(((TimedTask) anotherTask).executeTime, this.executeTime);
+            return Long.compare(this.executeTime, ((TimedTask) anotherTask).executeTime);
         }
         throw new ClassCastException();
     }
+
+    /**
+     * Execute the task, then return a series of tasks to add into the task queue.
+     * @return an array of extra tasks that should be appended into the task queue.
+     */
+    public Task[] execute(){
+        return task.execute();
+    }
+
 }

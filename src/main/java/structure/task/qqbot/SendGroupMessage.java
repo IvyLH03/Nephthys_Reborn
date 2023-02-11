@@ -6,7 +6,7 @@ import structure.task.Task;
 
 public class SendGroupMessage extends Task {
     private Group group;
-    private Message message; // TODO: Change to messageChain
+    private Message message;
     private Bot bot;
 
 
