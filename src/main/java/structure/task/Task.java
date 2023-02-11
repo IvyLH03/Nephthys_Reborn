@@ -10,8 +10,24 @@ public class Task implements Comparable<Task> {
 
     private String taskName;
     private int priority; // the priority of the task. 1 is for least urgent and 9 is for most urgent
-    private long time; // the time set for the task to be executed. A task will not be executed if
-                      // local time < time. It will be temporarily dismissed.
+
+    /**
+     * Create a task.
+     * @param taskName the name of the task
+     */
+    public Task(String taskName){
+        this.taskName = taskName;
+    }
+
+    /**
+     * Create a task.
+     * @param taskName the name of the task
+     * @param priority the priority of the task. 1 for the least urgent and 9 for the most urgent.
+     */
+    public Task(String taskName, int priority){
+        this(taskName);
+        this.priority = priority;
+    }
 
 
     /**
@@ -21,21 +37,7 @@ public class Task implements Comparable<Task> {
      */
     public int getPriority() { return priority; }
 
-    /**
-     * get the time set to execute the task.
-     * @return a timestamp represent the time to execute the task.
-     */
-    public long getTime() { return time; }
 
-    /**
-     * Compare current time with the time set to execute the task.
-     * @return true if time's up, false if still need to wait
-     */
-    public boolean timeToExecute() {
-        long currentTime = new Date().getTime();
-        if(currentTime > time) return true;
-        return false;
-    }
 
     /**
      * Compare this task with another task.
@@ -53,7 +55,7 @@ public class Task implements Comparable<Task> {
 
     @Override
     public String toString(){
-        return "[" + taskName + "](" + time + ")";
+        return "[" + taskName + "]";
     }
 
 
