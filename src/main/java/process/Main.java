@@ -57,17 +57,7 @@ public class Main {
         untimedQueue = new PriorityQueue<>();
         timedQueue = new PriorityQueue<>();
 
-        Date date = new Date();
-        TimedTask task1 = new TimedTask(new PrintTask("Print1"),
-                date.getTime() + Duration.ofSeconds(1).toMillis());
-        TimedTask task2 = new TimedTask(new PrintTask("Print2"),
-                date.getTime() + Duration.ofSeconds(5).toMillis());
-        TimedTask task3 = new TimedTask(new PrintTask("Print3"),
-                date.getTime() + Duration.ofSeconds(10).toMillis());
-
-        timedQueue.add(task1);
-        timedQueue.add(task2);
-        timedQueue.add(task3);
+        untimedQueue.add(new PrintTask("Hello World!"));
     }
 
     /**
@@ -80,15 +70,25 @@ public class Main {
         botInitialize();
         System.out.println("==Initialization Complete!==");
 
+        Task[] tasksToAdd;
+
         while(true){
             if(!timedQueue.isEmpty() && timedQueue.peek().timeToExecute()){
                 TimedTask task = timedQueue.remove();
-                task.execute();
+                tasksToAdd = task.execute();
+                for(Task t: tasksToAdd){
+                    if(t instanceof TimedTask) timedQueue.add((TimedTask) t);
+                    else if(t instanceof Task) untimedQueue.add(t);
+                }
             }
 
             if(!untimedQueue.isEmpty()){
                 Task task = untimedQueue.remove();
-                task.execute();
+                tasksToAdd = task.execute();
+                for(Task t: tasksToAdd){
+                    if(t instanceof TimedTask) timedQueue.add((TimedTask) t);
+                    else if(t instanceof Task) untimedQueue.add(t);
+                }
             }
         }
     }
